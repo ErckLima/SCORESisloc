@@ -3,7 +3,14 @@ import json
 import os
 
 app = Flask(__name__)
-app.secret_key = 'sua_chave_secreta'  # Necessária para usar sessões
+
+# Configuração de produção
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    app.secret_key = os.environ.get('SECRET_KEY', 'railway-production-key-2024')
+    app.config['ENV'] = 'production'
+    app.config['DEBUG'] = False
+else:
+    app.secret_key = 'sua_chave_secreta'  # Para desenvolvimento local
 
 # Usuário e senha fixos para exemplo
 USUARIO_VALIDO = 'admin'
@@ -290,5 +297,8 @@ def logout():
     return redirect(url_for('adm'))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') == 'development'
+    app.run(host='0.0.0.0', port=port, debug=debug)
 

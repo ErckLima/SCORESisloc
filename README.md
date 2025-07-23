@@ -1,115 +1,98 @@
-# Sistema de Cálculo de Score - Analistas
+# 📊 Sistema de Cálculo de Score - Analistas
 
-Sistema simples em Python Flask para calcular o score dos analistas baseado em suas métricas de performance.
+Sistema web para calcular scores de performance de analistas com metas específicas por time.
 
-## 📋 Pré-requisitos
+## 🚀 Deploy Rápido
 
-- Python 3.7 ou superior
-- pip (gerenciador de pacotes do Python)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/sistema-score)
 
-## 🚀 Instalação e Execução
+## ✨ Funcionalidades
 
-### 1. Baixar e extrair o projeto
-Extraia todos os arquivos em uma pasta de sua escolha.
+- 📊 **Cálculo de Score** com metas específicas por time
+- 🎯 **6 Times Configurados** (Fiscal, Rental, Back - Análise/Atendimento)
+- 🔧 **Interface de Administração** para gerenciar metas
+- 📱 **Design Responsivo** para desktop e mobile
+- 🔐 **Sistema de Autenticação** para área administrativa
+- 💾 **Persistência de Dados** em JSON
 
-### 2. Abrir terminal/prompt de comando
-Navegue até a pasta do projeto:
-```bash
-cd caminho/para/score-sistema-simples
+## 🎯 Times e Metas
+
+### Fiscal Análise
+- Resolvidos: 92 | TMR: 7,9h | SLA: 85% | FCR: 50% | CSAT: 97%
+
+### Fiscal Atendimento  
+- Resolvidos: 122 | TMR: 2,2h | SLA: 95% | FCR: 63% | CSAT: 97%
+
+### Rental Análise
+- Resolvidos: 120 | TMR: 9,5h | SLA: 85% | FCR: 45% | CSAT: 97%
+
+### Rental Atendimento
+- Resolvidos: 121 | TMR: 4,4h | SLA: 90% | FCR: 62% | CSAT: 97%
+
+### Back Análise
+- Resolvidos: 127 | TMR: 6,7h | SLA: 85% | FCR: 57% | CSAT: 97%
+
+### Back Atendimento
+- Resolvidos: 138 | TMR: 1,4h | SLA: 95% | FCR: 67% | CSAT: 97%
+
+## 🧮 Fórmula de Cálculo
+
+```
+% Resolvidas = (Valor_Inserido / Meta_Time) × 100
+% TMR = (Meta_TMR_Time / Valor_Inserido) × 100  
+% SLA = (Valor_Inserido / Meta_SLA_Time) × 100
+% FCR = (Valor_Inserido / Meta_FCR_Time) × 100
+% CSAT = (Valor_Inserido / Meta_CSAT_Time) × 100
+
+Score = (((% Resolvidas × 30) + (% TMR × 20) + (% SLA × 20) + (% FCR × 15) + (% CSAT × 15)) / 5) / 1000
 ```
 
-### 3. Instalar dependências
+## 🔑 Credenciais
+
+- **Usuário:** `admin`
+- **Senha:** `1234`
+
+## 🛠️ Tecnologias
+
+- **Backend:** Python Flask
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Deploy:** Railway
+- **Dados:** JSON
+
+## 📱 Uso
+
+1. **Acesse** o sistema
+2. **Selecione** o time/núcleo
+3. **Preencha** os valores obtidos
+4. **Calcule** o score automaticamente
+
+### Administração
+1. **Clique** em "Administração"
+2. **Login** com credenciais
+3. **Gerencie** metas dos times
+
+## 🚀 Deploy Local
+
 ```bash
+# Clonar repositório
+git clone https://github.com/seu-usuario/sistema-score.git
+cd sistema-score
+
+# Instalar dependências
 pip install -r requirements.txt
-```
 
-### 4. Executar a aplicação
-```bash
+# Executar
 python app.py
-```
 
-### 5. Acessar no navegador
-Abra seu navegador e acesse:
-```
+# Acessar
 http://localhost:5000
 ```
 
-## 📁 Estrutura do Projeto
+## 📄 Licença
 
-```
-score-sistema-simples/
-├── app.py              # Aplicação principal Flask
-├── requirements.txt    # Dependências do projeto
-├── README.md          # Este arquivo
-└── templates/
-    └── index.html     # Interface web
-```
+MIT License - Livre para uso comercial e pessoal.
 
-## 💻 Como Usar
+---
 
-1. **Selecione o Núcleo/Tipo** no dropdown
-2. **Preencha os campos:**
-   - Solicitações Resolvidas (número inteiro)
-   - TMR em horas (ex: 1.5)
-   - %SLA (0-100)
-   - %FCR (0-100)
-   - %CSAT (0-100)
-3. **Clique em "Calcular Score"**
-4. **Veja o resultado** com o score final e todas as métricas
-
-## 🔢 Valores dos Núcleos
-
-- **Fiscal Análise**: 100
-- **Back Análise**: 200
-- **Rental Análise**: 500
-- **Fiscal Atendimento**: 150
-- **Back Atendimento**: 250
-- **Rental Atendimento**: 550
-
-## 📊 Fórmula de Cálculo
-
-1. **% Resolvidos da Meta** = (Solicitações Resolvidas / Valor do Núcleo) × 100
-2. **% TMR da Meta** = (Valor do Núcleo / TMR) × 100
-3. **% SLA da Meta** = (SLA / Valor do Núcleo) × 100
-4. **% FCR da Meta** = (FCR / Valor do Núcleo) × 100
-5. **% CSAT da Meta** = (CSAT / Valor do Núcleo) × 100
-
-**Score Final** = (((1×30) + (2×20) + (3×20) + (4×15) + (5×15)) / 5) / 1000
-
-## 🛑 Para Parar a Aplicação
-
-No terminal onde a aplicação está rodando, pressione:
-```
-Ctrl + C
-```
-
-## ❗ Solução de Problemas
-
-### Erro: "Flask não encontrado"
-```bash
-pip install Flask
-```
-
-### Erro: "Porta 5000 já está em uso"
-Modifique a linha final do arquivo `app.py`:
-```python
-app.run(host='0.0.0.0', port=5001, debug=True)  # Mude para porta 5001
-```
-
-### Erro: "Python não encontrado"
-Certifique-se de que o Python está instalado e no PATH do sistema.
-
-## 🌐 API Endpoints
-
-### POST /api/calculate-score
-Calcula o score baseado nos dados fornecidos.
-
-### GET /api/nucleos
-Retorna lista de núcleos disponíveis.
-
-## 📱 Compatibilidade
-
-- ✅ Desktop (Chrome, Firefox, Safari, Edge)
-- ✅ Mobile (responsivo)
-- ✅ Windows, macOS, Linux
+**Desenvolvido para otimizar a gestão de performance de equipes de análise e atendimento.** 📊✨
 
