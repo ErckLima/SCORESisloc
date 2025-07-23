@@ -1,0 +1,44 @@
+{
+    "Fiscal analise": {
+        "resolvidos": 92,
+        "tmr": 7.9,
+        "sla": 85,
+        "fcr": 50,
+        "csat": 97
+    },
+    "Fiscal atendimento": {
+        "resolvidos": 122,
+        "tmr": 2.2,
+        "sla": 95,
+        "fcr": 63,
+        "csat": 97
+    },
+    "Rental analise": {
+        "resolvidos": 120,
+        "tmr": 9.5,
+        "sla": 85,
+        "fcr": 45,
+        "csat": 97
+    },
+    "Rental atendimento": {
+        "resolvidos": 121,
+        "tmr": 4.4,
+        "sla": 90,
+        "fcr": 62,
+        "csat": 97
+    },
+    "Back analise": {
+        "resolvidos": 127,
+        "tmr": 6.7,
+        "sla": 85,
+        "fcr": 57,
+        "csat": 97
+    },
+    "Back atendimento": {
+        "resolvidos": 138,
+        "tmr": 1.4,
+        "sla": 95,
+        "fcr": 67,
+        "csat": 97
+    }
+}
