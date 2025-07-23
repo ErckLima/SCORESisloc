@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cálculo de Score - Analistas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .admin-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+            margin-top: 20px;
+        }
+
+        .result-container.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .error-message {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/adm" class="admin-link">Administração</a>
+            <h1>Sistema de Cálculo de Score</h1>
+            <p>Calcule as métricas de performance dos analistas</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="scoreForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="nucleo_tipo">Núcleo/Tipo</label>
+                        <select id="nucleo_tipo" name="nucleo_tipo" required>
+                            <option value="">Selecione o núcleo/tipo</option>
+                            <option value="Fiscal analise">Fiscal Análise</option>
+                            <option value="Back analise">Back Análise</option>
+                            <option value="Rental analise">Rental Análise</option>
+                            <option value="Fiscal atendimento">Fiscal Atendimento</option>
+                            <option value="Back atendimento">Back Atendimento</option>
+                            <option value="Rental atendimento">Rental Atendimento</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="solicitacoes_resolvidas">Solicitações Resolvidas</label>
+                        <input type="number" id="solicitacoes_resolvidas" name="solicitacoes_resolvidas" 
+                               placeholder="Ex: 85" min="0" step="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tmr">TMR (Horas)</label>
+                        <input type="number" id="tmr" name="tmr" 
+                               placeholder="Ex: 1,5" min="0" step="0.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sla">%SLA</label>
+                        <input type="number" id="sla" name="sla" 
+                               placeholder="Ex: 95" min="0" max="100" step="0.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fcr">%FCR</label>
+                        <input type="number" id="fcr" name="fcr" 
+                               placeholder="Ex: 80" min="0" max="100" step="0.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="csat">%CSAT</label>
+                        <input type="number" id="csat" name="csat" 
+                               placeholder="Ex: 90" min="0" max="100" step="0.1" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-btn">
+                    Calcular Score
+                </button>
+            </form>
+
+            <div id="errorMessage" class="error-message"></div>
+
+            <div id="resultContainer" class="result-container">
+                <div class="score-display" id="scoreValue">0.00</div>
+                <div class="score-label">Score Final</div>
+                
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <div class="metric-label">% Resolvidos da Meta</div>
+                        <div class="metric-value" id="percResolvidos">0%</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">% TMR da Meta</div>
+                        <div class="metric-value" id="percTmr">0%</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">% SLA da Meta</div>
+                        <div class="metric-value" id="percSla">0%</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">% FCR da Meta</div>
+                        <div class="metric-value" id="percFcr">0%</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">% CSAT da Meta</div>
+                        <div class="metric-value" id="percCsat">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('scoreForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {
+                nucleo_tipo: formData.get('nucleo_tipo'),
+                solicitacoes_resolvidas: parseFloat(formData.get('solicitacoes_resolvidas')),
+                tmr: parseFloat(formData.get('tmr')),
+                sla: parseFloat(formData.get('sla')),
+                fcr: parseFloat(formData.get('fcr')),
+                csat: parseFloat(formData.get('csat'))
+            };
+
+            // Esconder mensagens anteriores
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('resultContainer').classList.remove('show');
+
+            try {
+                const response = await fetch('/api/calculate-score', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Mostrar resultado
+                    document.getElementById('scoreValue').textContent = result.score;
+                    document.getElementById('percResolvidos').textContent = result.metricas.perc_resolvidos + '%';
+                    document.getElementById('percTmr').textContent = result.metricas.perc_tmr + '%';
+                    document.getElementById('percSla').textContent = result.metricas.perc_sla + '%';
+                    document.getElementById('percFcr').textContent = result.metricas.perc_fcr + '%';
+                    document.getElementById('percCsat').textContent = result.metricas.perc_csat + '%';
+                    
+                    document.getElementById('resultContainer').classList.add('show');
+                } else {
+                    // Mostrar erro
+                    document.getElementById('errorMessage').textContent = result.error || 'Erro ao calcular score';
+                    document.getElementById('errorMessage').classList.add('show');
+                }
+            } catch (error) {
+                document.getElementById('errorMessage').textContent = 'Erro de conexão com o servidor';
+                document.getElementById('errorMessage').classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>
+
